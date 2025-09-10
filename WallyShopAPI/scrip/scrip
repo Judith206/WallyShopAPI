@@ -1,6 +1,24 @@
-﻿namespace WallyShopAPI.scrip
-{
-    public class scrip
-    {
-    }
-}
+﻿-- Crear base de datos
+CREATE DATABASE IF NOT EXISTS wallyshop;
+USE wallyshop;
+
+-- Crear tabla roles
+CREATE TABLE IF NOT EXISTS roles (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Nombre VARCHAR(50) NOT NULL,
+  PRIMARY KEY (Id),
+  UNIQUE (Nombre)
+);
+
+-- Crear tabla usuarios
+CREATE TABLE IF NOT EXISTS usuarios (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Nombre VARCHAR(100) NOT NULL,
+  Email VARCHAR(150) NOT NULL,
+  PasswordHash VARCHAR(255) NOT NULL,
+  RolId INT NOT NULL,
+  PRIMARY KEY (Id),
+  UNIQUE (Email),
+  FOREIGN KEY (RolId) REFERENCES roles(Id)
+);
+
