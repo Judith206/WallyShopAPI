@@ -12,5 +12,8 @@
 
         public int RolId { get; set; }
         public Rol Rol { get; set; } = null!;
+
+        //  Relación con Cotizaciones
+        public ICollection<Cotizacion> Cotizaciones { get; set; } = new List<Cotizacion>();
     }
 }
