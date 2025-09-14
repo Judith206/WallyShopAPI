@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 //Inyeccion
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IAuthService, AuthRepository>();
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 
 //JWT
 builder.Services.AddAuthentication("Bearer")
