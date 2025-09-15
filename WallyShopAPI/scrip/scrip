@@ -21,4 +21,34 @@ CREATE TABLE IF NOT EXISTS usuarios (
   UNIQUE (Email),
   FOREIGN KEY (RolId) REFERENCES roles(Id)
 );
-
+CREATE TABLE `cotizacion` (
+	`Id` INT NOT NULL AUTO_INCREMENT,
+	`Fecha` DATETIME NOT NULL,
+	`Contacto` INT NOT NULL,
+	`ProductoId` INT NOT NULL,
+	`UsuarioId` INT NOT NULL,
+	PRIMARY KEY (`Id`) USING BTREE,
+	INDEX `FK_Cotizacion_Producto` (`ProductoId`) USING BTREE,
+	INDEX `FK_Cotizacion_Usuario` (`UsuarioId`) USING BTREE,
+	CONSTRAINT `FK_Cotizacion_Producto` FOREIGN KEY (`ProductoId`) REFERENCES `productos` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Cotizacion_Usuario` FOREIGN KEY (`UsuarioId`) REFERENCES `usuarios` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `productos` (
+	`Id` INT NOT NULL AUTO_INCREMENT,
+	`Nombre` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`Descripcion` TEXT NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`Estado` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`Precio` DECIMAL(18,2) NOT NULL,
+	`Imagen` TEXT NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`UsuarioId` INT NOT NULL,
+	PRIMARY KEY (`Id`) USING BTREE,
+	INDEX `FK_Producto_Usuario` (`UsuarioId`) USING BTREE,
+	CONSTRAINT `FK_Producto_Usuario` FOREIGN KEY (`UsuarioId`) REFERENCES `usuarios` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=2
+;

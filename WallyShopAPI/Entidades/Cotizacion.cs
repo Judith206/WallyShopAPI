@@ -1,5 +1,8 @@
-﻿namespace WallyShopAPI.Entidades
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WallyShopAPI.Entidades
 {
+    [Table("cotizacion")]
     public class Cotizacion
     {
         public int Id { get; set; }

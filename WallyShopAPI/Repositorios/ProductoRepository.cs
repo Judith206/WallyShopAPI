@@ -15,12 +15,16 @@ namespace WallyShopAPI.Repositorios
 
         public async Task<IEnumerable<Producto>> GetAllAsync()
         {
-            return await _context.productos.ToListAsync();
+            return await _context.productos
+                .Include(p => p.Usuario) // Incluir el usuario relacionado
+                .ToListAsync();
         }
 
         public async Task<Producto?> GetByIdAsync(int id)
         {
-            return await _context.productos.FindAsync(id);
+            return await _context.productos
+                .Include(p => p.Usuario) // Incluir el usuario relacionado
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Producto> AddAsync(Producto producto)
