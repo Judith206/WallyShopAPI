@@ -1,6 +1,6 @@
 ﻿namespace WallyShopAPI.DTOs.ProductoDTOs
 {
-    public class ProductoDelete
+    public class ProductoDeleteDTO
     {
         public int Id { get; set; }
     }

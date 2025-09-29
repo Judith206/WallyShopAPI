@@ -1,6 +1,6 @@
 ﻿namespace WallyShopAPI.DTOs.UsuarioDTOs
 {
-    public class UsuarioLoginDto
+    public class UsuarioLoginDTO
     {
         public string Email { get; set; } = "";
 

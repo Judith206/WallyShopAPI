@@ -4,8 +4,8 @@ namespace WallyShopAPI.Interfaces
 {
     public interface IAuthService
     {
-        Task<UsuarioRespuestaDto> RegistrarAsync(UsuarioRegistroDTO dto);
+        Task<UsuarioRespuestaDTO> RegistrarAsync(UsuarioRegistroDTO dto);
 
-        Task<UsuarioRespuestaDto> LoginAsync(UsuarioLoginDto dto);
+        Task<UsuarioRespuestaDTO> LoginAsync(UsuarioLoginDTO dto);
     }
 }

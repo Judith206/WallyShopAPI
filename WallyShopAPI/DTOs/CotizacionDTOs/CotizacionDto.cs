@@ -1,6 +1,6 @@
 ﻿namespace WallyShopAPI.DTOs.CotizacionDTOs
 {
-    public class CotizacionDto
+    public class CotizacionDTO
     {
         public int Id { get; set; }
         public DateTime Fecha { get; set; }

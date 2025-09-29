@@ -18,7 +18,7 @@ namespace WallyShopAPI.Controllers
 
         // GET: api/cotizaciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CotizacionDto>>> GetCotizaciones()
+        public async Task<ActionResult<IEnumerable<CotizacionDTO>>> GetCotizaciones()
         {
             var cotizaciones = await _cotizacionRepository.GetAllCotizacionesAsync();
             return Ok(cotizaciones);
@@ -26,7 +26,7 @@ namespace WallyShopAPI.Controllers
 
         // GET: api/cotizaciones/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CotizacionDto>> GetCotizacion(int id)
+        public async Task<ActionResult<CotizacionDTO>> GetCotizacion(int id)
         {
             var cotizacion = await _cotizacionRepository.GetByIdAsync(id);
 
@@ -35,7 +35,7 @@ namespace WallyShopAPI.Controllers
                 return NotFound();
             }
 
-            var cotizacionDto = new CotizacionDto
+            var cotizacionDto = new CotizacionDTO
             {
                 Id = cotizacion.Id,
                 Fecha = cotizacion.Fecha,
@@ -52,7 +52,7 @@ namespace WallyShopAPI.Controllers
 
         // POST: api/cotizaciones
         [HttpPost]
-        public async Task<ActionResult<CotizacionDto>> PostCotizacion(CotizacionCreateDto createDto)
+        public async Task<ActionResult<CotizacionDTO>> PostCotizacion(CotizacionCreateDTO createDto)
         {
             var cotizacion = new Cotizacion
             {
@@ -67,7 +67,7 @@ namespace WallyShopAPI.Controllers
             // Recargar la entidad con las relaciones
             var cotizacionCompleta = await _cotizacionRepository.GetByIdAsync(nuevaCotizacion.Id);
 
-            var responseDto = new CotizacionDto
+            var responseDto = new CotizacionDTO
             {
                 Id = cotizacionCompleta.Id,
                 Fecha = cotizacionCompleta.Fecha,
@@ -84,7 +84,7 @@ namespace WallyShopAPI.Controllers
 
         // PUT: api/cotizaciones/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCotizacion(int id, CotizacionCreateDto updateDto)
+        public async Task<IActionResult> PutCotizacion(int id, CotizacionCreateDTO updateDto)
         {
             var cotizacionExistente = await _cotizacionRepository.GetByIdAsync(id);
             if (cotizacionExistente == null)

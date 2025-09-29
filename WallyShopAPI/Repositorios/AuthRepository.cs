@@ -20,7 +20,7 @@ namespace WallyShopAPI.Repositorios
             _config = config;
         }
 
-        public async Task<UsuarioRespuestaDto> RegistrarAsync(UsuarioRegistroDTO dto)
+        public async Task<UsuarioRespuestaDTO> RegistrarAsync(UsuarioRegistroDTO dto)
         {
             //Crear el usuario con Rolid
             var usuario = new Usuario
@@ -40,7 +40,7 @@ namespace WallyShopAPI.Repositorios
             //Generar el token
             string token = GenerarToken(usuario);
 
-            return new UsuarioRespuestaDto
+            return new UsuarioRespuestaDTO
             {
                 Id = usuario.Id,
                 Nombre = usuario.Nombre,
@@ -50,7 +50,7 @@ namespace WallyShopAPI.Repositorios
             };
         }
 
-        public async Task<UsuarioRespuestaDto?> LoginAsync(UsuarioLoginDto dto)
+        public async Task<UsuarioRespuestaDTO?> LoginAsync(UsuarioLoginDTO dto)
         {
             var usuario = await _usuarioRepo.GetByEmailAsync(dto.Email);
             if (usuario == null ) return null;
@@ -58,7 +58,7 @@ namespace WallyShopAPI.Repositorios
             if (!BCrypt.Net.BCrypt.Verify(dto.Password, usuario.PasswordHash))          
                 return null;
 
-            return new UsuarioRespuestaDto
+            return new UsuarioRespuestaDTO
             {
                 Id = usuario.Id,
                 Nombre = usuario.Nombre,

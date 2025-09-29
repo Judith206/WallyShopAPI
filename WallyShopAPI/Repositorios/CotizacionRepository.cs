@@ -31,12 +31,12 @@ namespace WallyShopAPI.Repositories
             return cotizacion;
         }
 
-        public async Task<List<CotizacionDto>> GetAllCotizacionesAsync()
+        public async Task<List<CotizacionDTO>> GetAllCotizacionesAsync()
         {
             return await _context.Cotizaciones
                 .Include(c => c.Usuario)
                 .Include(c => c.Producto)
-                .Select(c => new CotizacionDto
+                .Select(c => new CotizacionDTO
                 {
                     Id = c.Id,
                     Fecha = c.Fecha,

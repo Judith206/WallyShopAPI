@@ -20,7 +20,7 @@ namespace WallyShopAPI.Controllers
             return Ok(result);
         }
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] UsuarioLoginDto dto)
+        public async Task<IActionResult> Login([FromBody] UsuarioLoginDTO dto)
         {
             var result = await _authService.LoginAsync(dto);
             if (result == null) return Unauthorized("Credenciales invalidas");

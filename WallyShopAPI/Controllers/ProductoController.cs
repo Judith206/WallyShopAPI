@@ -24,7 +24,7 @@ namespace WallyShopAPI.Controllers
             var productos = await _productoRepository.GetAllAsync();
 
             // Convertir a DTOs para evitar referencias circulares
-            var productoDtos = productos.Select(p => new ProductoRead
+            var productoDtos = productos.Select(p => new ProductoReadDTO
             {
                 Id = p.Id,
                 Nombre = p.Nombre,
@@ -44,7 +44,7 @@ namespace WallyShopAPI.Controllers
             var producto = await _productoRepository.GetByIdAsync(id);
             if (producto == null) return NotFound();
 
-            var productoDto = new ProductoRead
+            var productoDto = new ProductoReadDTO
             {
                 Id = producto.Id,
                 Nombre = producto.Nombre,
@@ -59,7 +59,7 @@ namespace WallyShopAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductoRead>> Create(ProductoCreate createDto)
+        public async Task<ActionResult<ProductoReadDTO>> Create(ProductoCreateDTO createDto)
         {
             var producto = new Producto
             {
@@ -73,7 +73,7 @@ namespace WallyShopAPI.Controllers
 
             var created = await _productoRepository.AddAsync(producto);
 
-            var responseDto = new ProductoRead
+            var responseDto = new ProductoReadDTO
             {
                 Id = created.Id,
                 Nombre = created.Nombre,
@@ -88,7 +88,7 @@ namespace WallyShopAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ProductoRead>> Update(int id, ProductoUpdate updateDto)
+        public async Task<ActionResult<ProductoReadDTO>> Update(int id, ProductoUpdateDTO updateDto)
         {
             if (id != updateDto.Id) return BadRequest();
 
@@ -104,7 +104,7 @@ namespace WallyShopAPI.Controllers
 
             var updated = await _productoRepository.UpdateAsync(productoExistente);
 
-            var responseDto = new ProductoRead
+            var responseDto = new ProductoReadDTO
             {
                 Id = updated.Id,
                 Nombre = updated.Nombre,

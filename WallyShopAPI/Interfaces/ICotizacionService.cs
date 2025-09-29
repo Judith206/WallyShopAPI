@@ -12,7 +12,7 @@ namespace WallyShopAPI.Interfaces
         Task<Cotizacion> AddAsync(Cotizacion cotizacion);
 
         // Listar todas las cotizaciones (ahora usando CotizacionDto)
-        Task<List<CotizacionDto>> GetAllCotizacionesAsync();
+        Task<List<CotizacionDTO>> GetAllCotizacionesAsync();
 
         // Actualizar cotización
         Task<bool> UpdateAsync(Cotizacion cotizacion);

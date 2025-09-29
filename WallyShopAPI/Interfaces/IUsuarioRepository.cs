@@ -9,6 +9,6 @@ namespace WallyShopAPI.Interfaces
 
         Task<Usuario> AddAsync(Usuario usuario);
 
-        Task<List<UsuarioListadoDto>> GetAllUsuariosAsync();
+        Task<List<UsuarioListadoDTO>> GetAllUsuariosAsync();
     }
 }
