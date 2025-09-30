@@ -61,30 +61,44 @@ namespace WallyShopAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductoReadDTO>> Create(ProductoCreateDTO createDto)
         {
-            var producto = new Producto
+            try
             {
-                Nombre = createDto.Nombre,
-                Descripcion = createDto.Descripcion,
-                Estado = createDto.Estado,
-                Precio = createDto.Precio,
-                Imagen = createDto.Imagen,
-                UsuarioId = createDto.UsuarioId
-            };
+                Console.WriteLine($"Recibiendo producto: {createDto.Nombre}");
+                Console.WriteLine($"UsuarioId: {createDto.UsuarioId}");
+                Console.WriteLine($"Imagen tamaño: {createDto.Imagen?.Length ?? 0} bytes");
 
-            var created = await _productoRepository.AddAsync(producto);
+                var producto = new Producto
+                {
+                    Nombre = createDto.Nombre,
+                    Descripcion = createDto.Descripcion,
+                    Estado = createDto.Estado,
+                    Precio = createDto.Precio,
+                    Imagen = createDto.Imagen,
+                    UsuarioId = createDto.UsuarioId
+                };
 
-            var responseDto = new ProductoReadDTO
+                var created = await _productoRepository.AddAsync(producto);
+                Console.WriteLine($"Producto creado con ID: {created.Id}");
+
+                var responseDto = new ProductoReadDTO
+                {
+                    Id = created.Id,
+                    Nombre = created.Nombre,
+                    Descripcion = created.Descripcion,
+                    Estado = created.Estado,
+                    Precio = created.Precio,
+                    Imagen = created.Imagen,
+                    UsuarioId = created.UsuarioId
+                };
+
+                return CreatedAtAction(nameof(GetById), new { id = responseDto.Id }, responseDto);
+            }
+            catch (Exception ex)
             {
-                Id = created.Id,
-                Nombre = created.Nombre,
-                Descripcion = created.Descripcion,
-                Estado = created.Estado,
-                Precio = created.Precio,
-                Imagen = created.Imagen,
-                UsuarioId = created.UsuarioId
-            };
-
-            return CreatedAtAction(nameof(GetById), new { id = responseDto.Id }, responseDto);
+                Console.WriteLine($"Error al crear producto: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
