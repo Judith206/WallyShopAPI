@@ -41,6 +41,8 @@ namespace WallyShopAPI.Repositories
                     Id = c.Id,
                     Fecha = c.Fecha,
                     Contacto = c.Contacto,
+                    Cantidad = c.Cantidad,
+                    Total = c.Total,
                     UsuarioId = c.UsuarioId,
                     UsuarioNombre = c.Usuario.Nombre,
                     ProductoId = c.ProductoId,
