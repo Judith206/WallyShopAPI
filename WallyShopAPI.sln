@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WallyShopAPI", "WallyShopAPI\WallyShopAPI.csproj", "{B51BB7BA-442D-4C82-813E-74453F82FC94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WallyShopAPITestXUnit", "WallyShopAPITestXUnit\WallyShopAPITestXUnit.csproj", "{ADEAB4EF-A350-4A17-B4F5-E7A2B321259E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B51BB7BA-442D-4C82-813E-74453F82FC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B51BB7BA-442D-4C82-813E-74453F82FC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B51BB7BA-442D-4C82-813E-74453F82FC94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADEAB4EF-A350-4A17-B4F5-E7A2B321259E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADEAB4EF-A350-4A17-B4F5-E7A2B321259E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADEAB4EF-A350-4A17-B4F5-E7A2B321259E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADEAB4EF-A350-4A17-B4F5-E7A2B321259E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

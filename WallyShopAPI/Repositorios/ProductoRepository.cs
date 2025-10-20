@@ -24,6 +24,7 @@ namespace WallyShopAPI.Repositorios
         {
             return await _context.productos
                 .Include(p => p.Usuario) // Incluir el usuario relacionado
+                .ThenInclude(u => u.Rol)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
