@@ -262,23 +262,23 @@ namespace WallyShopAPITestXUnit
             // Arrange - Crear una cotización relacionada
             var cotizacion = new Cotizacion
             {
-                Id = 1,
+                Id = 2,
                 ProductoId = 1,
                 UsuarioId = 1,
                 Fecha = DateTime.Now,
-                Contacto = 1234
+                Contacto = "1234"
             };
             _context.Cotizaciones.Add(cotizacion);
             await _context.SaveChangesAsync();
 
             // Act
-            var result = await _repository.DeleteAsync(1);
+            var result = await _repository.DeleteAsync(2);
 
             // Assert
             Assert.True(result);
 
             // Verificar que la cotización sigue existiendo (por el DeleteBehavior.Restrict)
-            var cotizacionEnDb = await _context.Cotizaciones.FindAsync(1);
+            var cotizacionEnDb = await _context.Cotizaciones.FindAsync(2);
             Assert.NotNull(cotizacionEnDb);
         }
 
