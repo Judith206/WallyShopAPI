@@ -40,7 +40,7 @@ namespace WallyShopAPI.Controllers
                 Id = cotizacion.Id,
                 Fecha = cotizacion.Fecha,
                 Contacto = cotizacion.Contacto,
-                Cantidad = cotizacion.Cantidad, 
+                Cantidad = cotizacion.Cantidad,
                 Total = cotizacion.Total,
                 UsuarioId = cotizacion.UsuarioId,
                 UsuarioNombre = cotizacion.Usuario.Nombre,
@@ -50,6 +50,61 @@ namespace WallyShopAPI.Controllers
             };
 
             return Ok(cotizacionDto);
+        }
+
+        // NUEVO ENDPOINT: Filtrar por rango de fechas
+        // GET: api/cotizaciones/fechas?fechaInicio=2024-01-01&fechaFin=2024-12-31
+        [HttpGet("fechas")]
+        public async Task<ActionResult<IEnumerable<CotizacionDTO>>> GetCotizacionesPorFechas(
+            [FromQuery] DateTime fechaInicio,
+            [FromQuery] DateTime fechaFin)
+        {
+            try
+            {
+                Console.WriteLine($"📅 Filtrando cotizaciones por fecha: {fechaInicio:yyyy-MM-dd} a {fechaFin:yyyy-MM-dd}");
+
+                if (fechaInicio > fechaFin)
+                {
+                    return BadRequest("La fecha de inicio no puede ser mayor a la fecha fin");
+                }
+
+                var cotizaciones = await _cotizacionRepository.GetByFechaRangeAsync(fechaInicio, fechaFin);
+                Console.WriteLine($"✅ Se encontraron {cotizaciones.Count} cotizaciones");
+
+                return Ok(cotizaciones);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error al filtrar por fechas: {ex.Message}");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        // NUEVO ENDPOINT: Buscar por contacto
+        // GET: api/cotizaciones/buscar?contacto=john
+        [HttpGet("buscar")]
+        public async Task<ActionResult<IEnumerable<CotizacionDTO>>> GetCotizacionesPorContacto(
+            [FromQuery] string contacto)
+        {
+            try
+            {
+                Console.WriteLine($"🔍 Buscando cotizaciones por contacto: '{contacto}'");
+
+                if (string.IsNullOrWhiteSpace(contacto))
+                {
+                    return BadRequest("El término de búsqueda no puede estar vacío");
+                }
+
+                var cotizaciones = await _cotizacionRepository.GetByContactoAsync(contacto);
+                Console.WriteLine($"✅ Se encontraron {cotizaciones.Count} cotizaciones para: '{contacto}'");
+
+                return Ok(cotizaciones);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error al buscar por contacto: {ex.Message}");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
         // POST: api/cotizaciones
@@ -62,7 +117,7 @@ namespace WallyShopAPI.Controllers
                 Console.WriteLine($"   - Contacto: {createDto.Contacto}");
                 Console.WriteLine($"   - Fecha: {createDto.Fecha}");
                 Console.WriteLine($"   - ProductoId: {createDto.ProductoId}");
-                Console.WriteLine($"   - Cantidad: {createDto.Cantidad}"); 
+                Console.WriteLine($"   - Cantidad: {createDto.Cantidad}");
                 Console.WriteLine($"   - Total: {createDto.Total}");
                 Console.WriteLine($"   - UsuarioId: {createDto.UsuarioId}");
 
@@ -70,7 +125,7 @@ namespace WallyShopAPI.Controllers
                 {
                     Fecha = createDto.Fecha,
                     Contacto = createDto.Contacto,
-                    Cantidad = createDto.Cantidad, 
+                    Cantidad = createDto.Cantidad,
                     Total = createDto.Total,
                     UsuarioId = createDto.UsuarioId,
                     ProductoId = createDto.ProductoId
@@ -87,7 +142,7 @@ namespace WallyShopAPI.Controllers
                     Id = cotizacionCompleta.Id,
                     Fecha = cotizacionCompleta.Fecha,
                     Contacto = cotizacionCompleta.Contacto,
-                    Cantidad = cotizacionCompleta.Cantidad, // ✅ AGREGADO
+                    Cantidad = cotizacionCompleta.Cantidad,
                     Total = cotizacionCompleta.Total,
                     UsuarioId = cotizacionCompleta.UsuarioId,
                     UsuarioNombre = cotizacionCompleta.Usuario.Nombre,
@@ -122,7 +177,7 @@ namespace WallyShopAPI.Controllers
 
                 cotizacionExistente.Fecha = updateDto.Fecha;
                 cotizacionExistente.Contacto = updateDto.Contacto;
-                cotizacionExistente.Cantidad = updateDto.Cantidad; 
+                cotizacionExistente.Cantidad = updateDto.Cantidad;
                 cotizacionExistente.Total = updateDto.Total;
                 cotizacionExistente.UsuarioId = updateDto.UsuarioId;
                 cotizacionExistente.ProductoId = updateDto.ProductoId;
@@ -157,6 +212,5 @@ namespace WallyShopAPI.Controllers
 
             return NoContent();
         }
-
     }
 }

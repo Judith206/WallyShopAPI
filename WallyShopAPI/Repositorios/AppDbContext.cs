@@ -13,7 +13,6 @@ namespace WallyShopAPI.Repositorios
         public DbSet<Producto> productos { get; set; }
         public DbSet<Rol> Roles { get; set; }
         public DbSet<Cotizacion> Cotizaciones { get; set; }
-        public object Productos { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

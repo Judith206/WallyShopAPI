@@ -19,5 +19,9 @@ namespace WallyShopAPI.Interfaces
 
         // Eliminar cotización
         Task<bool> DeleteAsync(int id);
+
+        // NUEVOS MÉTODOS PARA FILTROS
+        Task<List<CotizacionDTO>> GetByFechaRangeAsync(DateTime fechaInicio, DateTime fechaFin);
+        Task<List<CotizacionDTO>> GetByContactoAsync(string contacto);
     }
 }

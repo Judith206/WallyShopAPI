@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 using WallyShopAPI.DTOs.CotizacionDTOs;
 using WallyShopAPI.Entidades;
 using WallyShopAPI.Interfaces;
@@ -65,6 +64,51 @@ namespace WallyShopAPI.Repositories
 
             _context.Cotizaciones.Remove(cotizacion);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        // NUEVOS MÉTODOS IMPLEMENTADOS
+        public async Task<List<CotizacionDTO>> GetByFechaRangeAsync(DateTime fechaInicio, DateTime fechaFin)
+        {
+            return await _context.Cotizaciones
+                .Include(c => c.Usuario)
+                .Include(c => c.Producto)
+                .Where(c => c.Fecha.Date >= fechaInicio.Date && c.Fecha.Date <= fechaFin.Date)
+                .Select(c => new CotizacionDTO
+                {
+                    Id = c.Id,
+                    Fecha = c.Fecha,
+                    Contacto = c.Contacto,
+                    Cantidad = c.Cantidad,
+                    Total = c.Total,
+                    UsuarioId = c.UsuarioId,
+                    UsuarioNombre = c.Usuario.Nombre,
+                    ProductoId = c.ProductoId,
+                    ProductoNombre = c.Producto.Nombre,
+                    ProductoPrecio = c.Producto.Precio
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<CotizacionDTO>> GetByContactoAsync(string contacto)
+        {
+            return await _context.Cotizaciones
+                .Include(c => c.Usuario)
+                .Include(c => c.Producto)
+                .Where(c => c.Contacto.ToLower().Contains(contacto.ToLower()))
+                .Select(c => new CotizacionDTO
+                {
+                    Id = c.Id,
+                    Fecha = c.Fecha,
+                    Contacto = c.Contacto,
+                    Cantidad = c.Cantidad,
+                    Total = c.Total,
+                    UsuarioId = c.UsuarioId,
+                    UsuarioNombre = c.Usuario.Nombre,
+                    ProductoId = c.ProductoId,
+                    ProductoNombre = c.Producto.Nombre,
+                    ProductoPrecio = c.Producto.Precio
+                })
+                .ToListAsync();
         }
     }
 }
