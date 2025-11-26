@@ -23,5 +23,8 @@ namespace WallyShopAPI.Interfaces
         // NUEVOS MÉTODOS PARA FILTROS
         Task<List<CotizacionDTO>> GetByFechaRangeAsync(DateTime fechaInicio, DateTime fechaFin);
         Task<List<CotizacionDTO>> GetByContactoAsync(string contacto);
+
+        Task<List<CotizacionDTO>> GetCotizacionesPersonalesAsync(int usuarioId);
+
     }
 }

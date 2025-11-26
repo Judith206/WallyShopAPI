@@ -110,5 +110,31 @@ namespace WallyShopAPI.Repositories
                 })
                 .ToListAsync();
         }
+
+        public async Task<List<CotizacionDTO>> GetCotizacionesPersonalesAsync(int usuarioId)
+        {
+            // Carga las cotizaciones donde el usuario es el creador (Comprador)
+            // O donde el producto cotizado pertenece al usuario (Vendedor)
+            return await _context.Cotizaciones
+                .Include(c => c.Usuario)
+                .Include(c => c.Producto)
+                    .ThenInclude(p => p.Usuario) // Incluir el dueño del producto
+                .Where(c => c.UsuarioId == usuarioId || c.Producto.UsuarioId == usuarioId) // <-- DOBLE FILTRO CLAVE
+                .Select(c => new CotizacionDTO
+                {
+                    Id = c.Id,
+                    Fecha = c.Fecha,
+                    Contacto = c.Contacto,
+                    Cantidad = c.Cantidad,
+                    Total = c.Total,
+                    UsuarioId = c.UsuarioId,
+                    UsuarioNombre = c.Usuario.Nombre,
+                    ProductoId = c.ProductoId,
+                    ProductoNombre = c.Producto.Nombre,
+                    ProductoPrecio = c.Producto.Precio
+                })
+                .ToListAsync();
+        }
+
     }
 }

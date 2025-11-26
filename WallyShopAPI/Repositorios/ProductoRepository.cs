@@ -51,5 +51,14 @@ namespace WallyShopAPI.Repositorios
             await _context.SaveChangesAsync();
             return true;
         }
+
+        // Nuevo método para "Mis Productos"
+        public async Task<IEnumerable<Producto>> GetProductosByUsuarioIdAsync(int usuarioId)
+        {
+            return await _context.productos
+                .Include(p => p.Usuario)
+                .Where(p => p.UsuarioId == usuarioId) // <-- FILTRO CLAVE
+                .ToListAsync();
+        }
     }
 }

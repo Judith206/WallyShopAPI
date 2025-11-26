@@ -9,5 +9,6 @@ namespace WallyShopAPI.Interfaces
         Task<Producto> AddAsync(Producto producto);
         Task<Producto> UpdateAsync(Producto producto);
         Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<Producto>> GetProductosByUsuarioIdAsync(int usuarioId);
     }
 }

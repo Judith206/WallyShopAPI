@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WallyShopAPI.DTOs.CotizacionDTOs;
 using WallyShopAPI.Entidades;
 using WallyShopAPI.Interfaces;
@@ -11,18 +12,35 @@ namespace WallyShopAPI.Controllers
     {
         private readonly ICotizacionRepository _cotizacionRepository;
 
+        // Método de ayuda para obtener el ID del usuario autenticado
+        private int GetUserId()
+        {
+            // Verifica si el usuario está autenticado y si tiene la Claim de ID
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            // Asumiendo que el NameIdentifier contiene el UsuarioId como string
+            if (userIdClaim != null && int.TryParse(userIdClaim, out int userId))
+            {
+                return userId;
+            }
+
+            // Devolver 0 o lanzar una excepción si el usuario no tiene un ID válido
+            // (Esto solo debería ocurrir si [Authorize] falla o se omite)
+            return 0;
+        }
+
         public CotizacionesController(ICotizacionRepository cotizacionRepository)
         {
             _cotizacionRepository = cotizacionRepository;
         }
 
         // GET: api/cotizaciones
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<CotizacionDTO>>> GetCotizaciones()
-        {
-            var cotizaciones = await _cotizacionRepository.GetAllCotizacionesAsync();
-            return Ok(cotizaciones);
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<CotizacionDTO>>> GetCotizaciones()
+        //{
+        //    var cotizaciones = await _cotizacionRepository.GetAllCotizacionesAsync();
+        //    return Ok(cotizaciones);
+        //}
 
         // GET: api/cotizaciones/5
         [HttpGet("{id}")]
@@ -212,5 +230,26 @@ namespace WallyShopAPI.Controllers
 
             return NoContent();
         }
+
+
+        // Reemplaza el método [HttpGet]
+        [HttpGet] // Este es el endpoint principal /api/cotizaciones
+        [Authorize] // Protegerlo
+        public async Task<ActionResult<IEnumerable<CotizacionDTO>>> GetCotizaciones()
+        {
+            int usuarioId = GetUserId(); // Obtener el ID de la sesión
+
+            if (usuarioId == 0) return Unauthorized("Usuario no autenticado.");
+
+            // USAR EL NUEVO MÉTODO FILTRADO
+            var cotizaciones = await _cotizacionRepository.GetCotizacionesPersonalesAsync(usuarioId);
+            return Ok(cotizaciones);
+        }
+        // El método GetCotizacionesPorFechas y GetCotizacionesPorContacto también deben ser modificados
+        // para usar el filtro de usuario, si quieres que sean personales.
+        // Por ejemplo, GetCotizacionesPorFechas pasaría a usar un método en el repositorio que acepte
+        // tanto el rango de fechas como el usuarioId.
+
+
     }
 }

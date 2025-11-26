@@ -12,6 +12,24 @@ namespace WallyShopAPI.Controllers
     public class ProductoController : Controller
     {
         private readonly IProductoRepository _productoRepository;
+
+        // Método de ayuda para obtener el ID del usuario autenticado
+        private int GetUserId()
+        {
+            // Verifica si el usuario está autenticado y si tiene la Claim de ID
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            // Asumiendo que el NameIdentifier contiene el UsuarioId como string
+            if (userIdClaim != null && int.TryParse(userIdClaim, out int userId))
+            {
+                return userId;
+            }
+
+            // Devolver 0 o lanzar una excepción si el usuario no tiene un ID válido
+            // (Esto solo debería ocurrir si [Authorize] falla o se omite)
+            return 0;
+        }
+
         public ProductoController(IProductoRepository pProductoRepository)
         {
             _productoRepository = pProductoRepository;
@@ -104,10 +122,18 @@ namespace WallyShopAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ProductoReadDTO>> Update(int id, ProductoUpdateDTO updateDto)
         {
+            int usuarioId = GetUserId();
+            if (usuarioId == 0) return Unauthorized("Usuario no autenticado.");
             if (id != updateDto.Id) return BadRequest();
 
             var productoExistente = await _productoRepository.GetByIdAsync(id);
             if (productoExistente == null) return NotFound();
+
+            // 🔑 VERIFICACIÓN CLAVE: Solo el dueño puede editar/eliminar
+            if (productoExistente.UsuarioId != usuarioId)
+            {
+                return Forbid("No tiene permisos para editar este producto."); // HTTP 403
+            }
 
             productoExistente.Nombre = updateDto.Nombre;
             productoExistente.Descripcion = updateDto.Descripcion;
@@ -140,5 +166,39 @@ namespace WallyShopAPI.Controllers
 
             return NoContent();
         }
+
+
+        // [HttpGet("productos")] // DEJA ESTE ENDPOINT para el Dashboard
+        // [Authorize] // Esto es correcto para protegerlo
+
+        // El nombre "GetProductos" es ambiguo. Podrías renombrarlo a "GetAllForDashboard" si quieres usarlo globalmente.
+        // Si lo quieres personal, modifícalo así:
+
+        [HttpGet("mis-productos")] // Nuevo endpoint para claridad, o usa el existente si se llama "MisProductos"
+        [Authorize]
+        public async Task<IActionResult> GetMisProductos() // Cambiar nombre
+        {
+            int usuarioId = GetUserId(); // Obtener el ID de la sesión
+
+            if (usuarioId == 0) return Unauthorized("Usuario no autenticado.");
+
+            // USAR EL NUEVO MÉTODO DEL REPOSITORIO
+            var productos = await _productoRepository.GetProductosByUsuarioIdAsync(usuarioId);
+
+            var productoDtos = productos.Select(p => new ProductoReadDTO
+            {
+                Id = p.Id,
+                Nombre = p.Nombre,
+                Descripcion = p.Descripcion,
+                Estado = p.Estado,
+                Precio = p.Precio,
+                Imagen = p.Imagen,
+                UsuarioId = p.UsuarioId
+            }).ToList();
+            return Ok(productoDtos);
+        }
+
+        // **OPCIONAL:** Mantén el [HttpGet("productos")] original si lo usas para el Dashboard
+        // Asegúrate de que tu frontend de "Mis Productos" llama a "mis-productos" (o al nombre que elijas).
     }
 }
