@@ -50,7 +50,8 @@ namespace WallyShopAPI.Controllers
                 Estado = p.Estado,
                 Precio = p.Precio,
                 Imagen = p.Imagen,
-                UsuarioId = p.UsuarioId
+                UsuarioId = p.UsuarioId,
+                UsuarioNombre = p.Usuario?.Nombre ?? "N/A"
             }).ToList();
 
             return Ok(productoDtos);
@@ -193,7 +194,8 @@ namespace WallyShopAPI.Controllers
                 Estado = p.Estado,
                 Precio = p.Precio,
                 Imagen = p.Imagen,
-                UsuarioId = p.UsuarioId
+                UsuarioId = p.UsuarioId,
+                UsuarioNombre = p.Usuario?.Nombre ?? "N/A"
             }).ToList();
             return Ok(productoDtos);
         }
